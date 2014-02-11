@@ -122,6 +122,10 @@ angular.module('ramlEditorApp')
       $scope.loadRaml(source, (($scope.fileBrowser || {}).selectedFile || {}).path).then(
         // success
         safeApplyWrapper($scope, function success(value) {
+          // hack: we have to make a full copy of an object because console modifies
+          // it later and makes it unusable for mocking service
+          $scope.fileBrowser.selectedFile.raml = angular.copy(value);
+
           eventService.broadcast('event:raml-parsed', value);
         }),
 
